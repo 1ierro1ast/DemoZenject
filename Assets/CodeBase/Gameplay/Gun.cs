@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using CodeBase.Extensions;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+        transform.position.SqrDistance(Vector3.zero);
     }
 
     // Update is called once per frame
