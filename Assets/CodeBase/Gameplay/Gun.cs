@@ -1,17 +1,23 @@
-
-using CodeBase.Extensions;
 using UnityEngine;
+using Zenject;
 
-public class Gun : MonoBehaviour
+namespace CodeBase.Gameplay
 {
-    void Start()
+    public class Gun : MonoBehaviour
     {
-        transform.position.SqrDistance(Vector3.zero);
-    }
+        [SerializeField] private Transform _gunPoint;
+        //private Bullet.Pool _bulletPool;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        /*[Inject]
+        public void Construct(Bullet.Pool bulletPool)
+        {
+            //_bulletPool = bulletPool;
+        }*/
+        public void Shoot(Enemy enemy)
+        {
+            Debug.Log(nameof(Shoot));
+            //var bullet = _bulletPool.Spawn();
+            //bullet.Initialize(enemy, _bulletPool, _gunPoint);
+        }
     }
 }
