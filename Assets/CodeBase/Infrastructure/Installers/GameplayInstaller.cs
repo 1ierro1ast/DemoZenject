@@ -18,7 +18,7 @@ namespace CodeBase.Infrastructure.Installers
 
             RegisterPlayer();
             RegisterEnemiesFactory();
-            //RegisterBulletPool();
+            RegisterBulletFactory();
             RegisterLoadingCurtain();
             RegisterEnemySpawner();
         }
@@ -53,13 +53,14 @@ namespace CodeBase.Infrastructure.Installers
                 .NonLazy();
         }
 
-        private void RegisterBulletPool()
+        private void RegisterBulletFactory()
         {
             Container
-                .BindMemoryPool<Bullet, Bullet.Pool>()
-                .FromComponentInNewPrefab(_bulletPrefab)
-                .AsSingle()
-                .NonLazy();
+                .BindFactory<float, Enemy, Transform, Bullet, Bullet.Factory>()
+                .FromPoolableMemoryPool<float, Enemy, Transform, Bullet, BulletPool>(poolBinder => poolBinder
+                    .WithInitialSize(12)
+                    .FromComponentInNewPrefab(_bulletPrefab)
+                    .UnderTransformGroup("Bullets"));
         }
 
         private void RegisterEnemiesFactory()
@@ -79,6 +80,11 @@ namespace CodeBase.Infrastructure.Installers
                 .WithGameObjectName("Player")
                 .AsSingle()
                 .NonLazy();
+        }
+
+        class BulletPool : MonoPoolableMemoryPool<float, Enemy, Transform, IMemoryPool, Bullet>
+        {
+            
         }
     }
 }

@@ -4,38 +4,51 @@ using Zenject;
 
 namespace CodeBase.Gameplay
 {
-    public class Bullet : MonoBehaviour, IDisposable
+    public class Bullet : MonoBehaviour, IPoolable<float, Enemy, Transform, IMemoryPool>
     {
         private Enemy _enemy;
-        private Pool _poolInstance;
-        public void Initialize(Enemy enemy, Pool pool, Transform gunPoint)
-        {
-            transform.position = gunPoint.position;
-            _enemy = enemy;
-            _poolInstance = pool;
-        }
-
-        public void Dispose()
-        {
-            _poolInstance?.Dispose();
-        }
+        private IMemoryPool _pool;
+        private float _speed;
 
         private void Update()
         {
-            if (_enemy == null) return;
-            if ((transform.position - _enemy.transform.position).sqrMagnitude <= 0.0)
+            if (_enemy == null)
+            {
+                _pool.Despawn(this);
+                return;
+            }
+            if ((transform.position - _enemy.transform.position).sqrMagnitude <= 0.01f)
             {
                 _enemy.Dead();
-                _poolInstance.Despawn(this);
+                _pool.Despawn(this);
                 _enemy = null;
                 return;
             }
-            transform.position = Vector3.Lerp(transform.position, _enemy.transform.position, 0.4f * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _enemy.transform.position, 0.1f * _speed * Time.deltaTime);
         }
 
-        public class Pool : MemoryPool<Bullet>
+        public void OnDespawned()
+        {
+            _pool = null;
+        }
+
+        public void OnSpawned(float speed, Enemy enemy, Transform gunPoint, IMemoryPool pool)
+        {
+            _speed = speed;
+            _pool = pool;
+            _enemy = enemy;
+            transform.position = gunPoint.position;
+        }
+
+        public class Factory : PlaceholderFactory<float, Enemy, Transform, Bullet>
         {
             
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public float Speed;
         }
     }
 }

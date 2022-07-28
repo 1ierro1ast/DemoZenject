@@ -6,18 +6,18 @@ namespace CodeBase.Gameplay
     public class Gun : MonoBehaviour
     {
         [SerializeField] private Transform _gunPoint;
-        //private Bullet.Pool _bulletPool;
+        private Bullet.Factory _bulletFactory;
+        private Bullet.Settings _bulletSettings;
 
-        /*[Inject]
-        public void Construct(Bullet.Pool bulletPool)
+        [Inject]
+        public void Construct(Bullet.Factory bulletFactory, Bullet.Settings bulletSettings)
         {
-            //_bulletPool = bulletPool;
-        }*/
+            _bulletFactory = bulletFactory;
+            _bulletSettings = bulletSettings;
+        }
         public void Shoot(Enemy enemy)
         {
-            Debug.Log(nameof(Shoot));
-            //var bullet = _bulletPool.Spawn();
-            //bullet.Initialize(enemy, _bulletPool, _gunPoint);
+            _bulletFactory.Create(_bulletSettings.Speed, enemy, _gunPoint);
         }
     }
 }

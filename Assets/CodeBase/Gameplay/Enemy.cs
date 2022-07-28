@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace CodeBase.Gameplay
@@ -8,6 +7,7 @@ namespace CodeBase.Gameplay
     {
         private Player _player;
         private SignalBus _signalBus;
+        
         [Inject]
         public void Construct(Player player, SignalBus signalBus)
         {
@@ -28,12 +28,12 @@ namespace CodeBase.Gameplay
 
         public void Dead()
         {
+            Debug.Log(nameof(Dead));
             Destroy(gameObject);
         }
 
         public class Factory : PlaceholderFactory<Enemy>
         {
-            
         }
     }
 }
