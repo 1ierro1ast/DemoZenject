@@ -1,4 +1,5 @@
 using CodeBase.Gameplay;
+using Test.CodeBase;
 using UnityEngine;
 using Zenject;
 
@@ -21,6 +22,14 @@ namespace CodeBase.Infrastructure.Installers
             RegisterBulletFactory();
             RegisterLoadingCurtain();
             RegisterEnemySpawner();
+        }
+
+        private void RegisterSomething()
+        {
+            Container
+                .Bind<IMovements>()
+                .To<Movements>()
+                .AsSingle();
         }
 
         private void RegisterSignals()
@@ -66,7 +75,7 @@ namespace CodeBase.Infrastructure.Installers
         private void RegisterEnemiesFactory()
         {
             Container
-                .BindFactory<Enemy, Enemy.Factory>()
+                .BindFactory<Vector3, Enemy, Enemy.Factory>()
                 .FromComponentInNewPrefab(_enemyPrefab)
                 .AsSingle()
                 .NonLazy();

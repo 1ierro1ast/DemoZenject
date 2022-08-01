@@ -18,8 +18,8 @@ namespace CodeBase.Gameplay
         {
             foreach (var spawnPoint in _spawnPoints)
             {
-                var enemy = _enemyFactory.Create();
-                enemy.transform.position = spawnPoint.position;
+                var enemy = _enemyFactory.Create(spawnPoint.position);
+                //enemy.transform.position = spawnPoint.position;
             }
         }
     }

@@ -57,4 +57,17 @@ namespace CodeBase.Extensions
             return new Vector3(vector2.x, y, vector2.y);
         }
     }
+
+    public static class GameObjectExtension
+    {
+        public static Component GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+        {
+            if (gameObject.TryGetComponent(out T tcomponent))
+            {
+                return tcomponent;
+            }
+
+            return gameObject.AddComponent<T>();
+        }
+    }
 }
