@@ -8,6 +8,8 @@ namespace CodeBase.Gameplay
         [SerializeField] private Transform[] _spawnPoints;
         private Enemy.Factory _enemyFactory;
 
+        public int EnemiesAmount => _spawnPoints.Length;
+
         [Inject]
         public void Construct(Enemy.Factory enemyFactory)
         {
@@ -18,8 +20,7 @@ namespace CodeBase.Gameplay
         {
             foreach (var spawnPoint in _spawnPoints)
             {
-                var enemy = _enemyFactory.Create(spawnPoint.position);
-                //enemy.transform.position = spawnPoint.position;
+                _enemyFactory.Create(spawnPoint.position);
             }
         }
     }

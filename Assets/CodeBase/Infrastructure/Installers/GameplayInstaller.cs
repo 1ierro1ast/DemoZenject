@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using CodeBase.Gameplay;
 using Test.CodeBase;
 using UnityEngine;
@@ -22,13 +23,22 @@ namespace CodeBase.Infrastructure.Installers
             RegisterBulletFactory();
             RegisterLoadingCurtain();
             RegisterEnemySpawner();
+            
+            RegisterWithoutAbstractions();
         }
 
-        private void RegisterSomething()
+        private void RegisterSomeNonMonoBehaviour()
         {
             Container
                 .Bind<IMovements>()
                 .To<Movements>()
+                .AsSingle();
+        }
+
+        private void RegisterWithoutAbstractions()
+        {
+            Container
+                .Bind<TestSevice>()
                 .AsSingle();
         }
 
@@ -68,6 +78,7 @@ namespace CodeBase.Infrastructure.Installers
                 .BindFactory<float, Enemy, Transform, Bullet, Bullet.Factory>()
                 .FromPoolableMemoryPool<float, Enemy, Transform, Bullet, BulletPool>(poolBinder => poolBinder
                     .WithInitialSize(12)
+                    .WithMaxSize(20)
                     .FromComponentInNewPrefab(_bulletPrefab)
                     .UnderTransformGroup("Bullets"));
         }

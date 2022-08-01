@@ -8,6 +8,7 @@ namespace CodeBase.Infrastructure.Installers
     public class GameSettingsInstaller : ScriptableObjectInstaller<GameSettingsInstaller>
     {
         public Bullet.Settings BulletSettings;
+        public Enemy.Settings EnemySettings;
 
         public override void InstallBindings()
         {

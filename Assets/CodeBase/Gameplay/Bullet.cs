@@ -6,9 +6,30 @@ namespace CodeBase.Gameplay
 {
     public class Bullet : MonoBehaviour, IPoolable<float, Enemy, Transform, IMemoryPool>
     {
-        private Enemy _enemy;
+        [Serializable]
+        public class Settings
+        {
+            public float Speed;
+        }
+
         private IMemoryPool _pool;
+
+        private Enemy _enemy;
+
         private float _speed;
+
+        public void OnDespawned()
+        {
+            _pool = null;
+        }
+
+        public void OnSpawned(float speed, Enemy enemy, Transform gunPoint, IMemoryPool pool)
+        {
+            _speed = speed;
+            _pool = pool;
+            _enemy = enemy;
+            transform.position = gunPoint.position;
+        }
 
         private void Update()
         {
@@ -27,28 +48,9 @@ namespace CodeBase.Gameplay
             transform.position = Vector3.Lerp(transform.position, _enemy.transform.position, 0.1f * _speed * Time.deltaTime);
         }
 
-        public void OnDespawned()
-        {
-            _pool = null;
-        }
-
-        public void OnSpawned(float speed, Enemy enemy, Transform gunPoint, IMemoryPool pool)
-        {
-            _speed = speed;
-            _pool = pool;
-            _enemy = enemy;
-            transform.position = gunPoint.position;
-        }
-
         public class Factory : PlaceholderFactory<float, Enemy, Transform, Bullet>
         {
             
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public float Speed;
         }
     }
 }

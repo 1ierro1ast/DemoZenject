@@ -7,30 +7,16 @@ namespace CodeBase.Gameplay
 {
     public class Enemy : MonoBehaviour
     {
-        public class Factory : PlaceholderFactory<Vector3, Enemy>
-        {
-            public override Enemy Create(Vector3 param)
-            {
-                var enemy = base.Create(param);
-                enemy.SetStartPoint(param);
-                return enemy;
-            }
-        }
-
-        private void SetStartPoint(Vector3 vector3)
-        {
-            transform.position = vector3;
-        }
-
         private Player _player;
 
         private SignalBus _signalBus;
 
         [Inject]
-        public void Construct(Player player, SignalBus signalBus)
+        public void Construct(Vector3 position, Player player, SignalBus signalBus)
         {
-            _player = player;
+            transform.position = position;
             _signalBus = signalBus;
+            _player = player;
         }
 
         private void Update()
@@ -48,6 +34,20 @@ namespace CodeBase.Gameplay
         {
             Debug.Log(nameof(Dead));
             Destroy(gameObject);
+        }
+
+        public class Factory : PlaceholderFactory<Vector3, Enemy>
+        {
+            public override Enemy Create(Vector3 param)
+            {
+                return base.Create(param);
+            }
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            [SerializeField] private float _uselessParameter;
         }
     }
 }
